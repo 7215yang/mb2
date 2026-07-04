@@ -1,0 +1,2918 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>面包工作室丨少年沃科技 - 定格MC瞬间</title>
+    <!-- Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
+    <style>
+        /* ========== CSS 变量 & 主题 ========== */
+        :root {
+            --bg-primary: #0a0a12;
+            --bg-secondary: #12121f;
+            --bg-card: rgba(255, 255, 255, 0.04);
+            --bg-card-hover: rgba(255, 255, 255, 0.08);
+            --bg-modal: rgba(0, 0, 0, 0.85);
+            --bg-input: rgba(255, 255, 255, 0.06);
+            --text-primary: #f0f0f0;
+            --text-secondary: #a0a0b8;
+            --text-muted: #6a6a82;
+            --accent: #f7931e;
+            --accent-glow: rgba(247, 147, 30, 0.25);
+            --accent-dark: #d67a0e;
+            --border-color: rgba(255, 255, 255, 0.06);
+            --shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --transition: 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --font-display: 'Orbitron', monospace;
+            --font-body: 'Inter', sans-serif;
+            --nav-bg: rgba(10, 10, 18, 0.82);
+            --hero-overlay: linear-gradient(135deg, rgba(10, 10, 18, 0.88) 0%, rgba(18, 18, 31, 0.70) 100%);
+            --logo-filter: none;
+        }
+        [data-theme="light"] {
+            --bg-primary: #f4f2ee;
+            --bg-secondary: #e8e4de;
+            --bg-card: rgba(255, 255, 255, 0.7);
+            --bg-card-hover: rgba(255, 255, 255, 0.9);
+            --bg-modal: rgba(0, 0, 0, 0.55);
+            --bg-input: rgba(0, 0, 0, 0.04);
+            --text-primary: #1a1a2e;
+            --text-secondary: #4a4a5e;
+            --text-muted: #7a7a8e;
+            --border-color: rgba(0, 0, 0, 0.08);
+            --shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            --nav-bg: rgba(244, 242, 238, 0.88);
+            --hero-overlay: linear-gradient(135deg, rgba(244, 242, 238, 0.88) 0%, rgba(232, 228, 222, 0.75) 100%);
+            --logo-filter: brightness(0.1);
+        }
+
+        /* ========== 全局重置 & 基础 ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: var(--font-body);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background var(--transition), color var(--transition);
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 10px;
+        }
+        a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: color var(--transition);
+        }
+        a:hover {
+            color: var(--accent-dark);
+        }
+        img {
+            max-width: 100%;
+            display: block;
+        }
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 28px;
+        }
+
+        /* ========== 导航栏 ========== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 14px 0;
+            background: var(--nav-bg);
+            backdrop-filter: blur(18px) saturate(1.3);
+            border-bottom: 1px solid var(--border-color);
+            transition: background var(--transition), border-color var(--transition);
+        }
+        .navbar .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            transition: color var(--transition);
+        }
+        .nav-logo img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--accent);
+            filter: var(--logo-filter);
+            transition: filter var(--transition);
+        }
+        .nav-logo span {
+            color: var(--accent);
+        }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            list-style: none;
+        }
+        .nav-links a {
+            color: var(--text-secondary);
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all var(--transition);
+            position: relative;
+        }
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--text-primary);
+            background: var(--bg-card);
+        }
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: 4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 2px;
+            background: var(--accent);
+            border-radius: 4px;
+        }
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .theme-toggle {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .theme-toggle:hover {
+            background: var(--bg-card-hover);
+            color: var(--accent);
+            transform: rotate(20deg);
+        }
+        .btn {
+            padding: 10px 24px;
+            border-radius: 30px;
+            border: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: var(--font-body);
+        }
+        .btn-primary {
+            background: var(--accent);
+            color: #fff;
+            box-shadow: 0 4px 20px var(--accent-glow);
+        }
+        .btn-primary:hover {
+            background: var(--accent-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px var(--accent-glow);
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+        .btn-outline:hover {
+            border-color: var(--accent);
+            color: var(--text-primary);
+            background: var(--bg-card);
+        }
+        .btn-danger {
+            background: #e74c3c;
+            color: #fff;
+        }
+        .btn-danger:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+        .btn-success {
+            background: #2ecc71;
+            color: #fff;
+        }
+        .btn-success:hover {
+            background: #27ae60;
+            transform: translateY(-2px);
+        }
+        .btn-sm {
+            padding: 6px 16px;
+            font-size: 0.8rem;
+        }
+        .btn-block {
+            width: 100%;
+            justify-content: center;
+        }
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        .user-avatar-nav {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--accent);
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+        .user-avatar-nav:hover {
+            transform: scale(1.05);
+            border-color: var(--accent-dark);
+        }
+
+        /* 移动端汉堡菜单 */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+        }
+        .hamburger span {
+            width: 26px;
+            height: 2.5px;
+            background: var(--text-secondary);
+            border-radius: 4px;
+            transition: all var(--transition);
+        }
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        /* ========== 英雄区 ========== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            padding: 120px 0 80px;
+            background: var(--bg-primary);
+            transition: background var(--transition);
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--hero-overlay);
+            z-index: 1;
+        }
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background-image: url('https://user-assets.sxlcdn.com/images/1215117/FrQznxX6KdA3B-x54EhSPvVakqkZ.jpg?imageMogr2/strip/auto-orient/thumbnail/1200x1200%3E/quality/90!/interlace/1/format/jpeg');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.25;
+            filter: blur(2px) saturate(0.6);
+            transition: opacity var(--transition);
+        }
+        [data-theme="light"] .hero-bg {
+            opacity: 0.15;
+        }
+        .hero .container {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+        .hero-content h1 {
+            font-family: var(--font-display);
+            font-size: 4rem;
+            font-weight: 900;
+            line-height: 1.1;
+            letter-spacing: 0.02em;
+        }
+        .hero-content h1 .highlight {
+            color: var(--accent);
+            text-shadow: 0 0 40px var(--accent-glow);
+        }
+        .hero-content .subtitle {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            margin: 16px 0 24px;
+            font-weight: 300;
+            letter-spacing: 0.04em;
+        }
+        .hero-content .desc {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            max-width: 520px;
+            line-height: 1.8;
+            margin-bottom: 32px;
+        }
+        .hero-actions {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .hero-stats {
+            display: flex;
+            gap: 40px;
+            margin-top: 40px;
+            padding-top: 32px;
+            border-top: 1px solid var(--border-color);
+        }
+        .hero-stats .stat {
+            text-align: center;
+        }
+        .hero-stats .stat .number {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        .hero-stats .stat .label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+        .hero-visual {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .hero-visual .logo-card {
+            width: 340px;
+            height: 340px;
+            border-radius: 50%;
+            background: var(--bg-card);
+            border: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: var(--shadow);
+            animation: float 6s ease-in-out infinite;
+        }
+        .hero-visual .logo-card img {
+            width: 85%;
+            height: 85%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .hero-visual .logo-card::after {
+            content: '';
+            position: absolute;
+            inset: -8px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            background: conic-gradient(from 0deg, var(--accent), transparent, var(--accent), transparent, var(--accent));
+            -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #fff calc(100% - 3px));
+            mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #fff calc(100% - 3px));
+            animation: spin 10s linear infinite;
+        }
+        @keyframes float {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-16px);
+            }
+        }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* ========== 通用区块 ========== */
+        .section {
+            padding: 80px 0;
+            transition: background var(--transition);
+        }
+        .section-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 56px;
+        }
+        .section-header h2 {
+            font-family: var(--font-display);
+            font-size: 2.6rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+        }
+        .section-header h2 .highlight {
+            color: var(--accent);
+        }
+        .section-header p {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            margin-top: 12px;
+        }
+        .section-alt {
+            background: var(--bg-secondary);
+        }
+
+        /* ========== 工作室介绍 ========== */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+        .about-text p {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            line-height: 1.9;
+            margin-bottom: 16px;
+        }
+        .about-text .highlight-box {
+            background: var(--bg-card);
+            border-left: 4px solid var(--accent);
+            padding: 20px 28px;
+            border-radius: var(--radius-sm);
+            margin-top: 20px;
+        }
+        .about-text .highlight-box p {
+            margin-bottom: 0;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+        .about-features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .about-features .feature {
+            background: var(--bg-card);
+            padding: 24px 20px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            transition: all var(--transition);
+            text-align: center;
+        }
+        .about-features .feature:hover {
+            background: var(--bg-card-hover);
+            transform: translateY(-4px);
+            border-color: var(--accent);
+        }
+        .about-features .feature i {
+            font-size: 2rem;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+        .about-features .feature h4 {
+            font-size: 1rem;
+            margin-bottom: 4px;
+        }
+        .about-features .feature p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        /* ========== 加入我们 ========== */
+        .join-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+        }
+        .join-requirements {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 36px 32px;
+            border: 1px solid var(--border-color);
+        }
+        .join-requirements h3 {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+        }
+        .join-requirements ul {
+            list-style: none;
+            padding: 0;
+        }
+        .join-requirements ul li {
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-secondary);
+        }
+        .join-requirements ul li:last-child {
+            border-bottom: none;
+        }
+        .join-requirements ul li i {
+            color: var(--accent);
+            width: 22px;
+            text-align: center;
+            font-size: 1rem;
+        }
+        .join-requirements ul li .optional {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            background: var(--bg-input);
+            padding: 0 10px;
+            border-radius: 20px;
+            margin-left: 6px;
+        }
+        .join-info {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        .join-info .info-card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 28px 32px;
+            border: 1px solid var(--border-color);
+            transition: all var(--transition);
+        }
+        .join-info .info-card:hover {
+            border-color: var(--accent);
+        }
+        .join-info .info-card h4 {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .join-info .info-card h4 i {
+            color: var(--accent);
+        }
+        .join-info .info-card p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+        .join-info .info-card .qq-number {
+            font-family: var(--font-display);
+            font-size: 1.6rem;
+            color: var(--accent);
+            letter-spacing: 0.06em;
+            cursor: pointer;
+        }
+        .join-info .info-card .auditors {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+        .join-info .info-card .auditors span {
+            background: var(--bg-input);
+            padding: 4px 16px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            border: 1px solid var(--border-color);
+        }
+
+        /* ========== 更新日志板块（新增分组样式） ========== */
+        .changelog-list {
+            max-width: 820px;
+            margin: 0 auto;
+        }
+        .changelog-year h3 {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            color: var(--accent);
+            margin: 30px 0 10px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 8px;
+        }
+        .changelog-month h4 {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin: 20px 0 10px;
+            padding-left: 10px;
+            border-left: 4px solid var(--accent);
+        }
+        .changelog-item {
+            background: var(--bg-card);
+            border-radius: var(--radius-sm);
+            padding: 20px 28px;
+            margin-bottom: 14px;
+            border: 1px solid var(--border-color);
+            transition: all var(--transition);
+        }
+        .changelog-item:hover {
+            border-color: var(--accent);
+            background: var(--bg-card-hover);
+        }
+        .changelog-item .changelog-header {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px 20px;
+            margin-bottom: 6px;
+        }
+        .changelog-item .changelog-date {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+        .changelog-item .changelog-version {
+            font-family: var(--font-display);
+            font-size: 0.8rem;
+            background: var(--accent-glow);
+            color: var(--accent);
+            padding: 0 12px;
+            border-radius: 20px;
+            border: 1px solid var(--accent);
+            font-weight: 700;
+        }
+        .changelog-item .changelog-title {
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: var(--text-primary);
+        }
+        .changelog-item .changelog-desc {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            padding-left: 4px;
+            margin-top: 2px;
+        }
+
+        /* ========== 模态框 ========== */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-modal);
+            backdrop-filter: blur(12px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        .modal-box {
+            background: var(--bg-secondary);
+            border-radius: var(--radius);
+            max-width: 460px;
+            width: 100%;
+            padding: 40px 36px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.35s ease;
+        }
+        .modal-box .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 1.6rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: color var(--transition);
+        }
+        .modal-box .modal-close:hover {
+            color: var(--text-primary);
+        }
+        .modal-box h2 {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+        .modal-box .modal-sub {
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            font-size: 0.95rem;
+        }
+        .modal-box .form-group {
+            margin-bottom: 18px;
+        }
+        .modal-box .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-bottom: 4px;
+            color: var(--text-secondary);
+        }
+        .modal-box .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            background: var(--bg-input);
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all var(--transition);
+            font-family: var(--font-body);
+        }
+        .modal-box .form-group input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px var(--accent-glow);
+        }
+        .modal-box .form-group .hint {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+        .modal-box .form-actions {
+            margin-top: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .modal-box .form-actions .btn {
+            justify-content: center;
+        }
+        .modal-box .switch-form {
+            text-align: center;
+            margin-top: 16px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        .modal-box .switch-form a {
+            color: var(--accent);
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .modal-box .switch-form a:hover {
+            text-decoration: underline;
+        }
+        /* 人机验证样式 */
+        .captcha-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .captcha-question {
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            background: var(--bg-input);
+            padding: 8px 18px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            user-select: none;
+            white-space: nowrap;
+        }
+        .captcha-input {
+            flex: 1;
+            min-width: 80px;
+        }
+        .captcha-refresh {
+            padding: 8px 14px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.96);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* ========== 个人中心 ========== */
+        .profile-modal .modal-box {
+            max-width: 520px;
+        }
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            margin-bottom: 28px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .profile-header .avatar-wrap {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid var(--accent);
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+        .profile-header .avatar-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .profile-header .avatar-wrap .avatar-edit {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.6);
+            color: #fff;
+            text-align: center;
+            padding: 4px 0;
+            font-size: 0.7rem;
+            opacity: 0;
+            transition: opacity var(--transition);
+        }
+        .profile-header .avatar-wrap:hover .avatar-edit {
+            opacity: 1;
+        }
+        .profile-header .profile-name h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+        .profile-header .profile-name p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        .profile-info .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.95rem;
+        }
+        .profile-info .info-row .label {
+            color: var(--text-muted);
+        }
+        .profile-info .info-row .value {
+            font-weight: 500;
+        }
+        .profile-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 24px;
+        }
+        .profile-actions .btn {
+            justify-content: center;
+        }
+
+        /* ========== 页脚 ========== */
+        .footer {
+            padding: 40px 0 24px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+        .footer .footer-brand {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+        .footer .footer-brand span {
+            color: var(--accent);
+        }
+        .footer .version {
+            display: inline-block;
+            background: var(--bg-card);
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            border: 1px solid var(--border-color);
+            margin-top: 6px;
+        }
+
+        /* ========== Toast 通知 ========== */
+        .toast-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 3000;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .toast {
+            padding: 16px 24px;
+            border-radius: var(--radius-sm);
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            animation: slideIn 0.4s ease;
+            max-width: 380px;
+            backdrop-filter: blur(8px);
+        }
+        .toast.success {
+            border-left: 4px solid #2ecc71;
+        }
+        .toast.error {
+            border-left: 4px solid #e74c3c;
+        }
+        .toast.info {
+            border-left: 4px solid var(--accent);
+        }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* ========== 响应式 ========== */
+        @media (max-width: 1024px) {
+            .hero .container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .hero-content .desc {
+                max-width: 100%;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            .hero-actions {
+                justify-content: center;
+            }
+            .hero-stats {
+                justify-content: center;
+            }
+            .hero-visual .logo-card {
+                width: 260px;
+                height: 260px;
+            }
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+            .join-wrapper {
+                grid-template-columns: 1fr;
+            }
+        }
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: 0;
+                right: 0;
+                background: var(--nav-bg);
+                backdrop-filter: blur(18px);
+                flex-direction: column;
+                padding: 24px 28px;
+                gap: 4px;
+                border-bottom: 1px solid var(--border-color);
+                transform: translateY(-120%);
+                transition: transform var(--transition);
+                display: flex;
+            }
+            .nav-links.open {
+                transform: translateY(0);
+            }
+            .hamburger {
+                display: flex;
+            }
+            .hero-content h1 {
+                font-size: 2.6rem;
+            }
+            .hero-content .subtitle {
+                font-size: 1rem;
+            }
+            .hero-visual .logo-card {
+                width: 200px;
+                height: 200px;
+            }
+            .section-header h2 {
+                font-size: 2rem;
+            }
+            .about-features {
+                grid-template-columns: 1fr;
+            }
+            .profile-actions {
+                grid-template-columns: 1fr;
+            }
+            .modal-box {
+                padding: 28px 20px;
+            }
+            .hero-stats {
+                gap: 20px;
+                flex-wrap: wrap;
+            }
+            .captcha-wrapper {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .captcha-question {
+                text-align: center;
+            }
+        }
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 16px;
+            }
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+            .hero-visual .logo-card {
+                width: 160px;
+                height: 160px;
+            }
+            .join-requirements {
+                padding: 24px 16px;
+            }
+        }
+
+        /* ================================================================
+           粒子背景、好友系统、特效
+           ================================================================ */
+
+        /* 粒子画布 */
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* 好友 / 申请列表样式 */
+        .friend-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            background: var(--bg-card);
+            border-radius: var(--radius-sm);
+            margin-bottom: 10px;
+            border: 1px solid var(--border-color);
+            transition: all var(--transition);
+        }
+        .friend-item:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--accent);
+            transform: translateX(4px);
+        }
+        .friend-item .info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .friend-item .info img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--border-color);
+        }
+        .friend-item .info .name {
+            font-weight: 600;
+        }
+        .friend-item .status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.85rem;
+        }
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .status-dot.online {
+            background: #2ecc71;
+            box-shadow: 0 0 8px #2ecc71;
+        }
+        .status-dot.offline {
+            background: #7f8c8d;
+        }
+
+        /* 好友模态框宽度适配 */
+        #friendModal .modal-box {
+            max-width: 600px;
+        }
+
+        /* 申请列表区块 */
+        .request-section {
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 2px dashed var(--border-color);
+        }
+        .request-section h4 {
+            color: var(--accent);
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .request-section h4 .badge {
+            background: var(--accent);
+            color: #fff;
+            font-size: 0.7rem;
+            border-radius: 30px;
+            padding: 0 10px;
+            font-weight: 700;
+        }
+
+        /* 好友搜索栏状态 */
+        .friend-search-status {
+            font-size: 0.8rem;
+            margin-top: 4px;
+            min-height: 20px;
+            color: var(--text-muted);
+        }
+        .friend-search-status .ok {
+            color: #2ecc71;
+        }
+        .friend-search-status .err {
+            color: #e74c3c;
+        }
+        .friend-search-status .pending {
+            color: var(--accent);
+        }
+
+        /* 霓虹文字特效 */
+        .neon-text {
+            text-shadow: 0 0 10px var(--accent-glow), 0 0 20px var(--accent-glow), 0 0 40px var(--accent-glow);
+        }
+
+        /* 卡片3D悬浮效果 */
+        .card-3d {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            will-change: transform;
+        }
+        .card-3d:hover {
+            transform: perspective(800px) rotateX(2deg) rotateY(4deg) translateY(-6px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        /* 滚动显示动画 */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 鼠标光效容器 */
+        #cursor-glow {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(247, 147, 30, 0.08) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: left 0.1s ease-out, top 0.1s ease-out;
+            will-change: left, top;
+        }
+        [data-theme="light"] #cursor-glow {
+            background: radial-gradient(circle, rgba(247, 147, 30, 0.05) 0%, transparent 70%);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ==================== 粒子画布 ==================== -->
+    <canvas id="particles-canvas"></canvas>
+
+    <!-- ==================== 鼠标光效 ==================== -->
+    <div id="cursor-glow"></div>
+
+    <!-- ==================== 导航栏 ==================== -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <a href="#" class="nav-logo" id="navLogo">
+                <img src="https://user-assets.sxlcdn.com/images/1215117/FrQznxX6KdA3B-x54EhSPvVakqkZ.jpg?imageMogr2/strip/auto-orient/thumbnail/300x300%3E/quality/90!/interlace/1/format/jpeg" alt="面包工作室" />
+                <span>面包</span>工作室
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home" class="active">首页</a></li>
+                <li><a href="#about">工作室</a></li>
+                <li><a href="#join">加入我们</a></li>
+                <li><a href="#changelog">更新日志</a></li>
+                <li><a href="#" id="friendNavLink">好友</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="btn btn-primary btn-sm" id="loginBtn">登录</button>
+                <button class="btn btn-outline btn-sm" id="registerBtn">注册</button>
+                <div id="userWidget" style="display:none; display:flex; align-items:center; gap:10px;">
+                    <img class="user-avatar-nav" id="navUserAvatar" src="" alt="头像" />
+                    <span id="navUserName" style="font-weight:500; font-size:0.9rem; color:var(--text-primary);"></span>
+                </div>
+                <button class="hamburger" id="hamburger" aria-label="菜单">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ==================== 英雄区 ==================== -->
+    <section class="hero" id="home">
+        <div class="hero-bg"></div>
+        <div class="container">
+            <div class="hero-content">
+                <h1>
+                    面包<br />
+                    <span class="highlight neon-text">工作室</span>
+                </h1>
+                <p class="subtitle">✦ 定格 MC 瞬间</p>
+                <p class="desc">
+                    专注 B站 MC 创作，适合创作方向迷茫的 MC UP主。
+                    一起联机游玩，一同拍摄剪辑游戏视频，
+                    认真、努力、勤奋、刻苦地制作视频。
+                </p>
+                <div class="hero-actions">
+                    <a href="#join" class="btn btn-primary"><i class="fas fa-arrow-right"></i> 加入我们</a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="number">4+</div>
+                        <div class="label">核心成员</div>
+                    </div>
+                    <div class="stat">
+                        <div class="number">10+</div>
+                        <div class="label">合作 UP 主</div>
+                    </div>
+                    <div class="stat">
+                        <div class="number">∞</div>
+                        <div class="label">创作可能</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="logo-card card-3d">
+                    <img src="https://user-assets.sxlcdn.com/images/1215117/FrQznxX6KdA3B-x54EhSPvVakqkZ.jpg?imageMogr2/strip/auto-orient/thumbnail/300x300%3E/quality/90!/interlace/1/format/jpeg" alt="面包工作室 Logo" />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== 工作室介绍 ==================== -->
+    <section class="section" id="about">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2>关于 <span class="highlight">工作室</span></h2>
+                <p>一群热爱 MC 的创作者，用心打磨每一帧画面</p>
+            </div>
+            <div class="about-grid">
+                <div class="about-text reveal">
+                    <p>
+                        <strong>面包工作室</strong> 是一支专注于 <strong>《我的世界》</strong> 内容创作的团队，
+                        由少年沃科技支持运营。我们相信，每一段游戏时光都值得被精心记录，
+                        每一个创意都值得被认真对待。
+                    </p>
+                    <p>
+                        无论你是刚起步的 UP 主，还是经验丰富的创作者，
+                        如果你在视频制作方向感到迷茫，欢迎加入我们。
+                        一起联机、拍摄、剪辑，在协作中成长，在热爱中发光。
+                    </p>
+                    <div class="highlight-box">
+                        <p>
+                            <i class="fas fa-quote-left" style="color:var(--accent);margin-right:8px;"></i>
+                            认真，努力，勤奋，刻苦 —— 这是我们对待每一个作品的态度。
+                        </p>
+                    </div>
+                </div>
+                <div class="about-features">
+                    <div class="feature card-3d reveal">
+                        <i class="fas fa-video"></i>
+                        <h4>专业制作</h4>
+                        <p>从拍摄到剪辑，全流程协作</p>
+                    </div>
+                    <div class="feature card-3d reveal">
+                        <i class="fas fa-users"></i>
+                        <h4>联机游玩</h4>
+                        <p>一起探索，一起创造</p>
+                    </div>
+                    <div class="feature card-3d reveal">
+                        <i class="fas fa-lightbulb"></i>
+                        <h4>方向指导</h4>
+                        <p>帮你找到专属创作风格</p>
+                    </div>
+                    <div class="feature card-3d reveal">
+                        <i class="fas fa-heart"></i>
+                        <h4>温暖社区</h4>
+                        <p>和善互助，共同成长</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== 加入我们 ==================== -->
+    <section class="section section-alt" id="join">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2>加入 <span class="highlight">我们</span></h2>
+                <p>现在加入的人还少，快来一起成为面包工作室的一员吧！</p>
+            </div>
+            <div class="join-wrapper">
+                <div class="join-requirements reveal">
+                    <h3><i class="fas fa-list-check" style="color:var(--accent);margin-right:10px;"></i>加入要求</h3>
+                    <ul>
+                        <li><i class="fas fa-check-circle"></i> 可以玩 Java 版 MC</li>
+                        <li><i class="fas fa-check-circle"></i> 正版账号 <span class="optional">非必须</span></li>
+                        <li><i class="fas fa-check-circle"></i> 必须要有麦克风 <span class="optional">用于交流</span></li>
+                        <li><i class="fas fa-check-circle"></i> 不能说违规内容</li>
+                        <li><i class="fas fa-check-circle"></i> 要了解《我的世界》</li>
+                        <li><i class="fas fa-check-circle"></i> 不限年龄</li>
+                    </ul>
+                    <div style="margin-top:20px;padding-top:20px;border-top:1px solid var(--border-color);">
+                        <p style="color:var(--text-secondary);font-size:0.95rem;">
+                            <i class="fas fa-question-circle" style="color:var(--accent);"></i>
+                            有什么想问的问题可以找我们反馈，我们都是和善的。
+                        </p>
+                    </div>
+                </div>
+                <div class="join-info">
+                    <div class="info-card card-3d reveal">
+                        <h4><i class="fab fa-qq"></i> QQ 群</h4>
+                        <p class="qq-number" id="qqCopy">701127260</p>
+                        <p style="color:var(--text-muted);font-size:0.85rem;">点击复制，加入群聊</p>
+                    </div>
+                    <div class="info-card card-3d reveal">
+                        <h4><i class="fas fa-user-shield"></i> 审核员</h4>
+                        <div class="auditors">
+                            <span>🧑‍🍳 小面包吖two</span>
+                            <span>🧑‍💻 yang</span>
+                        </div>
+                        <p style="color:var(--text-muted);font-size:0.85rem;margin-top:8px;">他们会在群里迎接你～</p>
+                    </div>
+                    <div class="info-card card-3d reveal" style="border-color:var(--accent);background:var(--bg-card);">
+                        <h4><i class="fas fa-rocket" style="color:var(--accent);"></i> 现在加入</h4>
+                        <p style="color:var(--text-secondary);">
+                            加入 SNW 生态，绑定你的 Microsoft 账号，
+                            开启面包工作室之旅！
+                        </p>
+                        <button class="btn btn-primary btn-block" id="joinNowBtn" style="margin-top:12px;">
+                            <i class="fas fa-user-plus"></i> 立即注册 SNW ID
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== 更新日志 ==================== -->
+    <section class="section" id="changelog">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2><i class="fas fa-history" style="color:var(--accent);"></i> 更新 <span class="highlight">日志</span></h2>
+                <p>记录面包工作室的每一次进步</p>
+            </div>
+            <div class="changelog-list" id="changelogList">
+                <!-- 由 JavaScript 动态渲染 -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== 页脚 ==================== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-brand">
+                <span>面包</span>工作室 丨 少年沃科技
+            </div>
+            <p>© 2026 面包工作室 · 定格 MC 瞬间 · 用热爱发电</p>
+            <div class="version">v2.0 Based on shenlinOS</div>
+        </div>
+    </footer>
+
+    <!-- ==================== 登录模态框 ==================== -->
+    <div class="modal-overlay" id="loginModal">
+        <div class="modal-box">
+            <button class="modal-close" id="loginModalClose">&times;</button>
+            <h2>登录</h2>
+            <p class="modal-sub">使用你的 SNW ID 登录面包工作室</p>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>用户名 / SNW ID</label>
+                    <input type="text" id="loginUsername" placeholder="输入用户名" required />
+                </div>
+                <div class="form-group">
+                    <label>密码</label>
+                    <input type="password" id="loginPassword" placeholder="输入密码" required />
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary btn-block"><i class="fas fa-sign-in-alt"></i> 登录</button>
+                </div>
+            </form>
+            <div class="switch-form">
+                还没有账号？ <a id="switchToRegister">立即注册</a>
+                &nbsp;|&nbsp; <a id="switchToReset">忘记密码？</a>
+                &nbsp;|&nbsp; <a id="switchToForgotUser">忘记用户名？</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 注册模态框 ==================== -->
+    <div class="modal-overlay" id="registerModal">
+        <div class="modal-box">
+            <button class="modal-close" id="registerModalClose">&times;</button>
+            <h2>注册 SNW ID</h2>
+            <p class="modal-sub">加入面包工作室，开启你的创作之旅</p>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label>真实姓名 <span style="color:var(--accent);">*</span></label>
+                    <input type="text" id="regRealName" placeholder="请输入真实姓名" required />
+                </div>
+                <div class="form-group">
+                    <label>Microsoft 账号 <span style="color:var(--accent);">*</span></label>
+                    <input type="email" id="regMicrosoft" placeholder="outlook@xxx.com" required />
+                    <div class="hint">用于绑定与验证</div>
+                </div>
+                <div class="form-group">
+                    <label>用户名 (SNW ID) <span style="color:var(--accent);">*</span></label>
+                    <input type="text" id="regUsername" placeholder="4-16 位字母或数字" required pattern="[A-Za-z0-9]{4,16}" />
+                    <div class="hint">4-16 位字母或数字，将作为你的登录名</div>
+                </div>
+                <div class="form-group">
+                    <label>密码 <span style="color:var(--accent);">*</span></label>
+                    <input type="password" id="regPassword" placeholder="至少 6 位" required minlength="6" />
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary btn-block"><i class="fas fa-user-plus"></i> 注册</button>
+                </div>
+            </form>
+            <div class="switch-form">
+                已有账号？ <a id="switchToLogin">去登录</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 绑定 Microsoft 账号模态框 ==================== -->
+    <div class="modal-overlay" id="bindModal">
+        <div class="modal-box">
+            <button class="modal-close" id="bindModalClose">&times;</button>
+            <h2>绑定 Microsoft 账号</h2>
+            <p class="modal-sub">你的账号尚未绑定 Microsoft 账号，请绑定以享受完整服务</p>
+            <form id="bindForm">
+                <div class="form-group">
+                    <label>Microsoft 账号 <span style="color:var(--accent);">*</span></label>
+                    <input type="email" id="bindMicrosoft" placeholder="outlook@xxx.com" required />
+                    <div class="hint">用于验证与安全</div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary btn-block"><i class="fas fa-link"></i> 绑定</button>
+                </div>
+            </form>
+            <div class="switch-form" style="margin-top:12px;">
+                <a id="bindSkip" style="color:var(--text-muted);">稍后绑定</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 个人中心模态框 ==================== -->
+    <div class="modal-overlay profile-modal" id="profileModal">
+        <div class="modal-box">
+            <button class="modal-close" id="profileModalClose">&times;</button>
+            <h2><i class="fas fa-user-cog" style="color:var(--accent);"></i> 个人中心</h2>
+            <p class="modal-sub">管理你的面包工作室账号</p>
+            <div class="profile-header">
+                <div class="avatar-wrap" id="profileAvatarWrap">
+                    <img id="profileAvatarImg" src="" alt="头像" />
+                    <div class="avatar-edit" id="avatarEditBtn"><i class="fas fa-camera"></i> 更换</div>
+                </div>
+                <div class="profile-name">
+                    <h3 id="profileDisplayName">用户名</h3>
+                    <p id="profileRealNameDisplay">真实姓名</p>
+                </div>
+            </div>
+            <div class="profile-info">
+                <div class="info-row">
+                    <span class="label"><i class="fas fa-user"></i> 用户名</span>
+                    <span class="value" id="profileUsername">—</span>
+                </div>
+                <div class="info-row">
+                    <span class="label"><i class="fas fa-id-card"></i> 真实姓名</span>
+                    <span class="value" id="profileRealName">—</span>
+                </div>
+                <div class="info-row">
+                    <span class="label"><i class="fab fa-microsoft"></i> Microsoft 账号</span>
+                    <span class="value" id="profileMicrosoft">—</span>
+                </div>
+                <div class="info-row">
+                    <span class="label"><i class="fas fa-calendar-alt"></i> 加入时间</span>
+                    <span class="value" id="profileJoined">—</span>
+                </div>
+            </div>
+            <div class="profile-actions">
+                <button class="btn btn-outline" id="profileEditNameBtn"><i class="fas fa-pen"></i> 修改名称</button>
+                <button class="btn btn-outline" id="profileEditAvatarBtn"><i class="fas fa-image"></i> 更换头像</button>
+                <button class="btn btn-outline" id="profileBindBtn" style="display:none;"><i class="fas fa-link"></i> 绑定 Microsoft</button>
+                <button class="btn btn-danger" id="profileLogoutBtn"><i class="fas fa-sign-out-alt"></i> 退出登录</button>
+                <button class="btn btn-danger" id="profileDeleteBtn" style="background:#c0392b;"><i class="fas fa-trash-alt"></i> 注销账号</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 好友模态框 ==================== -->
+    <div class="modal-overlay" id="friendModal">
+        <div class="modal-box">
+            <button class="modal-close" id="friendModalClose">&times;</button>
+            <h2><i class="fas fa-user-friends" style="color:var(--accent);"></i> 好友 & 申请</h2>
+            <p class="modal-sub">搜索用户发送申请，处理收到的请求</p>
+            <div style="display:flex; flex-direction:column; gap:6px; margin-bottom:20px;">
+                <div style="display:flex; gap:10px;">
+                    <input type="text" id="friendSearchInput" placeholder="输入好友用户名" style="flex:1; padding:10px 14px; border-radius:var(--radius-sm); border:1px solid var(--border-color); background:var(--bg-input); color:var(--text-primary);" />
+                    <button class="btn btn-primary" id="friendSendRequestBtn"><i class="fas fa-paper-plane"></i> 发送申请</button>
+                </div>
+                <div id="friendSearchStatus" class="friend-search-status"></div>
+            </div>
+            <div id="incomingRequestsContainer" class="request-section">
+                <h4><i class="fas fa-inbox"></i> 收到的申请 <span class="badge" id="requestBadge">0</span></h4>
+                <div id="incomingRequestsList">
+                    <p style="color:var(--text-muted); font-size:0.9rem; padding:6px 0;">暂无申请</p>
+                </div>
+            </div>
+            <div id="friendListContainer">
+                <h4 style="margin-bottom:10px; color:var(--text-secondary);"><i class="fas fa-users"></i> 我的好友</h4>
+                <div id="friendList">
+                    <p style="color:var(--text-muted); text-align:center; padding:10px 0;">暂无好友</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 找回密码模态框 ==================== -->
+    <div class="modal-overlay" id="resetPasswordModal">
+        <div class="modal-box">
+            <button class="modal-close" id="resetModalClose">&times;</button>
+            <h2><i class="fas fa-key" style="color:var(--accent);"></i> 找回密码</h2>
+            <p class="modal-sub">验证您的身份后重置密码（需输入注册时的真实姓名）</p>
+            <form id="resetForm">
+                <div class="form-group">
+                    <label>真实姓名 <span style="color:var(--accent);">*</span></label>
+                    <input type="text" id="resetRealName" placeholder="请输入注册时的真实姓名" required />
+                </div>
+                <div class="form-group">
+                    <label>用户名 <span style="color:var(--accent);">*</span></label>
+                    <input type="text" id="resetUsername" placeholder="输入你的用户名" required />
+                </div>
+                <div class="form-group">
+                    <label>Microsoft 账号 <span style="color:var(--accent);">*</span></label>
+                    <input type="email" id="resetMicrosoft" placeholder="注册时绑定的邮箱" required />
+                </div>
+                <div class="form-group" id="captchaGroupReset">
+                    <label>人机验证 <span style="color:var(--accent);">*</span></label>
+                    <div class="captcha-wrapper">
+                        <span class="captcha-question" id="captchaQuestionReset">3 + 5 = ?</span>
+                        <input type="text" id="captchaInputReset" placeholder="输入答案" class="captcha-input" style="padding:10px 14px; border-radius:var(--radius-sm); border:1px solid var(--border-color); background:var(--bg-input); color:var(--text-primary);" required />
+                        <button type="button" id="captchaRefreshReset" class="btn btn-outline btn-sm captcha-refresh"><i class="fas fa-sync-alt"></i></button>
+                    </div>
+                    <div class="hint">请输入上方算式的计算结果</div>
+                </div>
+                <div class="form-group">
+                    <label>新密码 <span style="color:var(--accent);">*</span></label>
+                    <input type="password" id="resetNewPassword" placeholder="至少 6 位" required minlength="6" />
+                </div>
+                <div class="form-group">
+                    <label>确认新密码 <span style="color:var(--accent);">*</span></label>
+                    <input type="password" id="resetConfirmPassword" placeholder="再次输入新密码" required minlength="6" />
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary btn-block"><i class="fas fa-save"></i> 重置密码</button>
+                </div>
+            </form>
+            <div class="switch-form">
+                想起密码了？ <a id="switchToLoginFromReset">去登录</a>
+                &nbsp;|&nbsp; <a id="switchToForgotFromReset">忘记用户名？</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 找回用户名模态框 ==================== -->
+    <div class="modal-overlay" id="forgotUsernameModal">
+        <div class="modal-box">
+            <button class="modal-close" id="forgotUserModalClose">&times;</button>
+            <h2><i class="fas fa-user-tag" style="color:var(--accent);"></i> 找回用户名</h2>
+            <p class="modal-sub">输入注册时的真实姓名和 Microsoft 账号，通过人机验证后即可查看用户名</p>
+            <form id="forgotUserForm">
+                <div class="form-group">
+                    <label>真实姓名 <span style="color:var(--accent);">*</span></label>
+                    <input type="text" id="forgotUserRealName" placeholder="请输入注册时的真实姓名" required />
+                </div>
+                <div class="form-group">
+                    <label>Microsoft 账号 <span style="color:var(--accent);">*</span></label>
+                    <input type="email" id="forgotUserEmail" placeholder="注册时绑定的邮箱" required />
+                </div>
+                <div class="form-group">
+                    <label>人机验证 <span style="color:var(--accent);">*</span></label>
+                    <div class="captcha-wrapper">
+                        <span class="captcha-question" id="captchaQuestionForgot">3 + 5 = ?</span>
+                        <input type="text" id="captchaInputForgot" placeholder="输入答案" class="captcha-input" style="padding:10px 14px; border-radius:var(--radius-sm); border:1px solid var(--border-color); background:var(--bg-input); color:var(--text-primary);" required />
+                        <button type="button" id="captchaRefreshForgot" class="btn btn-outline btn-sm captcha-refresh"><i class="fas fa-sync-alt"></i></button>
+                    </div>
+                    <div class="hint">请输入上方算式的计算结果</div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary btn-block"><i class="fas fa-search"></i> 查找用户名</button>
+                </div>
+            </form>
+            <div id="forgotUserResult" style="margin-top:16px; padding:12px; border-radius:var(--radius-sm); background:var(--bg-card); border:1px solid var(--border-color); display:none;">
+                <p style="font-weight:600; margin-bottom:4px;">📋 找到以下关联账号：</p>
+                <div id="forgotUserList" style="color:var(--text-secondary);"></div>
+            </div>
+            <div class="switch-form" style="margin-top:12px;">
+                <a id="switchToLoginFromForgotUser">去登录</a>
+                &nbsp;|&nbsp; <a id="switchToResetFromForgotUser">忘记密码？</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== Toast 容器 ==================== -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- ==================== JavaScript ==================== -->
+    <script>
+        // ================================================================
+        //  配置
+        // ================================================================
+        const CONFIG = {
+            GITHUB_TOKEN: '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',
+            REPO_OWNER: '7215yang',
+            REPO_NAME: 'SNWuser',
+            USER_DATA_FILE: 'users.json',
+            DEFAULT_AVATARS: [
+                'https://minotar.net/avatar/Steve/100.png',
+                'https://minotar.net/avatar/Alex/100.png',
+                'https://minotar.net/avatar/Herobrine/100.png',
+                'https://minotar.net/avatar/Notch/100.png',
+                'https://minotar.net/avatar/Dinnerbone/100.png',
+                'https://minotar.net/avatar/Grumm/100.png',
+            ],
+        };
+
+        // ================================================================
+        //  更新日志数据
+        // ================================================================
+        const changelogItems = [{
+            date: '2026-07-04',
+            version: 'v2.0',
+            title: '增强安全：找回密码/用户名需验证真实姓名',
+            description: '在「忘记密码」和「忘记用户名」流程中增加真实姓名验证，必须输入注册时的真实姓名才能继续操作，提升账号安全性。'
+        }, {
+            date: '2026-07-04',
+            version: 'v1.9',
+            title: '新增「更新日志」板块',
+            description: '在页面中增加了更新日志区域，集中展示近期所有功能更新和修复，方便用户了解最新动态。'
+        }, {
+            date: '2026-07-04',
+            version: 'v1.8',
+            title: '新增「找回用户名」功能',
+            description: '用户可通过绑定的 Microsoft 账号 + 人机验证找回自己的用户名，方便忘记用户名的用户。'
+        }, {
+            date: '2026-07-04',
+            version: 'v1.7',
+            title: '新增「找回密码」功能',
+            description: '用户可通过用户名 + 绑定的 Microsoft 账号 + 人机验证重置密码，保障账号安全。'
+        }, {
+            date: '2026-07-03',
+            version: 'v1.5',
+            title: '真实姓名仅好友可见',
+            description: '真实姓名不再对外公开，只有在成为好友后，才能在好友列表中看到对方的真实姓名，保护用户隐私。'
+        }, {
+            date: '2026-07-02',
+            version: 'v1.3',
+            title: '好友申请系统上线',
+            description: '添加好友需先发送申请，对方可接受或拒绝。双向申请会自动成为好友，提升社交安全性。'
+        }, {
+            date: '2026-07-01',
+            version: 'v1.2',
+            title: '修复登录编码问题',
+            description: '修复了因 UTF-8 编码解码错误导致密码哈希损坏的问题，现在注册和登录均能正常工作。'
+        }, {
+            date: '2026-06-30',
+            version: 'v1.1',
+            title: '好友系统 & 特效升级',
+            description: '新增好友列表、在线状态、粒子背景、鼠标光效等视觉和功能升级。'
+        }, ];
+
+        // ================================================================
+        //  状态
+        // ================================================================
+        let currentUser = null;
+        let allUsers = [];
+        let currentTheme = 'dark';
+        let heartbeatInterval = null;
+        let captchaAnswerReset = 0;
+        let captchaAnswerForgot = 0;
+
+        // ================================================================
+        //  DOM 引用
+        // ================================================================
+        const $ = (s) => document.querySelector(s);
+        const $$ = (s) => document.querySelectorAll(s);
+
+        const navLinks = $('#navLinks');
+        const hamburger = $('#hamburger');
+        const themeToggle = $('#themeToggle');
+        const loginBtn = $('#loginBtn');
+        const registerBtn = $('#registerBtn');
+        const userWidget = $('#userWidget');
+        const navUserAvatar = $('#navUserAvatar');
+        const navUserName = $('#navUserName');
+        const loginModal = $('#loginModal');
+        const registerModal = $('#registerModal');
+        const bindModal = $('#bindModal');
+        const profileModal = $('#profileModal');
+        const friendModal = $('#friendModal');
+        const resetModal = $('#resetPasswordModal');
+        const forgotUserModal = $('#forgotUsernameModal');
+        const loginModalClose = $('#loginModalClose');
+        const registerModalClose = $('#registerModalClose');
+        const bindModalClose = $('#bindModalClose');
+        const profileModalClose = $('#profileModalClose');
+        const friendModalClose = $('#friendModalClose');
+        const resetModalClose = $('#resetModalClose');
+        const forgotUserModalClose = $('#forgotUserModalClose');
+        const switchToRegister = $('#switchToRegister');
+        const switchToLogin = $('#switchToLogin');
+        const switchToReset = $('#switchToReset');
+        const switchToForgotUser = $('#switchToForgotUser');
+        const switchToLoginFromReset = $('#switchToLoginFromReset');
+        const switchToForgotFromReset = $('#switchToForgotFromReset');
+        const switchToLoginFromForgotUser = $('#switchToLoginFromForgotUser');
+        const switchToResetFromForgotUser = $('#switchToResetFromForgotUser');
+        const loginForm = $('#loginForm');
+        const registerForm = $('#registerForm');
+        const bindForm = $('#bindForm');
+        const resetForm = $('#resetForm');
+        const forgotUserForm = $('#forgotUserForm');
+        const loginUsername = $('#loginUsername');
+        const loginPassword = $('#loginPassword');
+        const regRealName = $('#regRealName');
+        const regMicrosoft = $('#regMicrosoft');
+        const regUsername = $('#regUsername');
+        const regPassword = $('#regPassword');
+        const bindMicrosoft = $('#bindMicrosoft');
+        const resetRealName = $('#resetRealName');
+        const resetUsername = $('#resetUsername');
+        const resetMicrosoft = $('#resetMicrosoft');
+        const resetNewPassword = $('#resetNewPassword');
+        const resetConfirmPassword = $('#resetConfirmPassword');
+        const captchaInputReset = $('#captchaInputReset');
+        const captchaQuestionReset = $('#captchaQuestionReset');
+        const captchaRefreshReset = $('#captchaRefreshReset');
+        const forgotUserRealName = $('#forgotUserRealName');
+        const forgotUserEmail = $('#forgotUserEmail');
+        const captchaInputForgot = $('#captchaInputForgot');
+        const captchaQuestionForgot = $('#captchaQuestionForgot');
+        const captchaRefreshForgot = $('#captchaRefreshForgot');
+        const forgotUserResult = $('#forgotUserResult');
+        const forgotUserList = $('#forgotUserList');
+        const profileAvatarImg = $('#profileAvatarImg');
+        const profileDisplayName = $('#profileDisplayName');
+        const profileRealNameDisplay = $('#profileRealNameDisplay');
+        const profileUsername = $('#profileUsername');
+        const profileRealName = $('#profileRealName');
+        const profileMicrosoft = $('#profileMicrosoft');
+        const profileJoined = $('#profileJoined');
+        const profileLogoutBtn = $('#profileLogoutBtn');
+        const profileDeleteBtn = $('#profileDeleteBtn');
+        const profileEditNameBtn = $('#profileEditNameBtn');
+        const profileEditAvatarBtn = $('#profileEditAvatarBtn');
+        const profileBindBtn = $('#profileBindBtn');
+        const joinNowBtn = $('#joinNowBtn');
+        const toastContainer = $('#toastContainer');
+        const qqCopy = $('#qqCopy');
+        const bindSkip = $('#bindSkip');
+        const friendNavLink = $('#friendNavLink');
+        const friendSearchInput = $('#friendSearchInput');
+        const friendSendRequestBtn = $('#friendSendRequestBtn');
+        const friendSearchStatus = $('#friendSearchStatus');
+        const incomingRequestsList = $('#incomingRequestsList');
+        const requestBadge = $('#requestBadge');
+        const friendList = $('#friendList');
+
+        // ================================================================
+        //  工具函数
+        // ================================================================
+        async function hashPassword(password) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(password);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        function toast(message, type = 'info') {
+            const el = document.createElement('div');
+            el.className = `toast ${type}`;
+            el.textContent = message;
+            toastContainer.appendChild(el);
+            setTimeout(() => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateX(40px)';
+                setTimeout(() => el.remove(), 400);
+            }, 3500);
+        }
+
+        function generateId() { return 'snw_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+
+        function getDefaultAvatar() {
+            return CONFIG.DEFAULT_AVATARS[Math.floor(Math.random() * CONFIG.DEFAULT_AVATARS.length)];
+        }
+
+        function ensureUserFields(user) {
+            if (user && !Array.isArray(user.friendRequests)) user.friendRequests = [];
+            if (user && !Array.isArray(user.friends)) user.friends = [];
+            return user;
+        }
+
+        // ================================================================
+        //  人机验证（两套独立）
+        // ================================================================
+        function generateCaptchaReset() {
+            const a = Math.floor(Math.random() * 9) + 1;
+            const b = Math.floor(Math.random() * 9) + 1;
+            captchaAnswerReset = a + b;
+            captchaQuestionReset.textContent = `${a} + ${b} = ?`;
+            if (captchaInputReset) captchaInputReset.value = '';
+        }
+
+        function generateCaptchaForgot() {
+            const a = Math.floor(Math.random() * 9) + 1;
+            const b = Math.floor(Math.random() * 9) + 1;
+            captchaAnswerForgot = a + b;
+            captchaQuestionForgot.textContent = `${a} + ${b} = ?`;
+            if (captchaInputForgot) captchaInputForgot.value = '';
+        }
+
+        // ================================================================
+        //  渲染更新日志（按年→月分组）
+        // ================================================================
+        function renderChangelog() {
+            const container = document.getElementById('changelogList');
+            if (!container) return;
+            const sorted = [...changelogItems].sort((a, b) => new Date(b.date) - new Date(a.date));
+            // 按年分组
+            const groups = {};
+            sorted.forEach(item => {
+                const date = new Date(item.date);
+                const year = date.getFullYear();
+                const month = date.getMonth() + 1; // 1-12
+                if (!groups[year]) groups[year] = {};
+                if (!groups[year][month]) groups[year][month] = [];
+                groups[year][month].push(item);
+            });
+            let html = '';
+            // 遍历年份（降序）
+            const years = Object.keys(groups).sort((a, b) => b - a);
+            years.forEach(year => {
+                html += `<div class="changelog-year"><h3>${year}</h3>`;
+                const months = Object.keys(groups[year]).sort((a, b) => b - a);
+                months.forEach(month => {
+                    const monthName = new Date(2000, month - 1, 1).toLocaleString('default', { month: 'long' });
+                    html += `<div class="changelog-month"><h4>${monthName}</h4>`;
+                    groups[year][month].forEach(item => {
+                        html += `
+                                <div class="changelog-item reveal">
+                                    <div class="changelog-header">
+                                        <span class="changelog-date">${item.date}</span>
+                                        <span class="changelog-version">${item.version}</span>
+                                        <span class="changelog-title">${item.title}</span>
+                                    </div>
+                                    <div class="changelog-desc">${item.description}</div>
+                                </div>
+                            `;
+                    });
+                    html += `</div>`;
+                });
+                html += `</div>`;
+            });
+            container.innerHTML = html;
+            // 重新触发reveal动画
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+            }, { threshold: 0.15 });
+            container.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        }
+
+        // ================================================================
+        //  GitHub API 操作
+        // ================================================================
+        async function fetchUsers() {
+            const url =
+                `https://api.github.com/repos/${CONFIG.REPO_OWNER}/${CONFIG.REPO_NAME}/contents/${CONFIG.USER_DATA_FILE}`;
+            try {
+                const res = await fetch(url, { headers: { 'Authorization': `token ${CONFIG.GITHUB_TOKEN}` } });
+                if (res.status === 404) return { users: [], sha: null };
+                if (!res.ok) throw new Error(`GitHub API 错误: ${res.status}`);
+                const data = await res.json();
+                let content;
+                try {
+                    const decoded = atob(data.content);
+                    content = decodeURIComponent(escape(decoded));
+                } catch (e1) {
+                    try {
+                        const binary = atob(data.content);
+                        const bytes = new Uint8Array(binary.length);
+                        for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+                        content = new TextDecoder('utf-8').decode(bytes);
+                    } catch (e2) { content = atob(data.content); }
+                }
+                const parsed = JSON.parse(content);
+                const users = (parsed.users || []).map(u => ensureUserFields(u));
+                return { users, sha: data.sha };
+            } catch (e) {
+                console.warn('fetchUsers 失败:', e);
+                const cached = localStorage.getItem('snw_users_cache');
+                if (cached) { try { const parsed = JSON.parse(cached); return { users: (parsed || []).map(u =>
+                            ensureUserFields(u)), sha: null }; } catch (_) {} }
+                return { users: [], sha: null };
+            }
+        }
+
+        async function saveUsers(users, sha) {
+            const content = btoa(unescape(encodeURIComponent(JSON.stringify({ users }, null, 2))));
+            const url =
+                `https://api.github.com/repos/${CONFIG.REPO_OWNER}/${CONFIG.REPO_NAME}/contents/${CONFIG.USER_DATA_FILE}`;
+            const payload = { message: '更新用户数据 via 面包工作室', content: content, sha: sha || undefined };
+            try {
+                const res = await fetch(url, {
+                    method: 'PUT',
+                    headers: { 'Authorization': `token ${CONFIG.GITHUB_TOKEN}`, 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload),
+                });
+                if (!res.ok) throw new Error(`保存失败: ${res.status}`);
+                const data = await res.json();
+                localStorage.setItem('snw_users_cache', JSON.stringify(users));
+                return data.content.sha;
+            } catch (e) {
+                console.error('saveUsers 失败:', e);
+                localStorage.setItem('snw_users_cache', JSON.stringify(users));
+                toast('数据已保存到本地缓存 (GitHub 同步失败)', 'error');
+                return sha;
+            }
+        }
+
+        // ================================================================
+        //  用户管理
+        // ================================================================
+        async function loadUsers() {
+            const result = await fetchUsers();
+            allUsers = result.users.map(u => ensureUserFields(u));
+            return allUsers;
+        }
+
+        async function saveUsersToRemote() {
+            const result = await fetchUsers();
+            return await saveUsers(allUsers, result.sha);
+        }
+
+        function findUserByUsername(username) {
+            return allUsers.find(u => u.username.toLowerCase() === username.toLowerCase());
+        }
+
+        function findUserById(id) {
+            return allUsers.find(u => u.id === id);
+        }
+
+        async function registerUser(realName, microsoft, username, password) {
+            if (findUserByUsername(username)) throw new Error('用户名已被使用，请换一个');
+            const hashedPassword = await hashPassword(password);
+            const newUser = ensureUserFields({
+                id: generateId(),
+                realName: realName.trim(),
+                microsoft: microsoft.trim(),
+                username: username.trim().toLowerCase(),
+                password: hashedPassword,
+                avatar: getDefaultAvatar(),
+                createdAt: new Date().toISOString(),
+                role: 'member',
+                friends: [],
+                friendRequests: [],
+                online: false,
+                lastActive: null,
+            });
+            allUsers.push(newUser);
+            await saveUsersToRemote();
+            return newUser;
+        }
+
+        async function loginUser(username, password) {
+            const user = findUserByUsername(username);
+            if (!user) throw new Error('用户不存在');
+            const hashedInput = await hashPassword(password);
+            if (user.password !== hashedInput) throw new Error('密码错误');
+            return user;
+        }
+
+        async function updateUser(userId, updates) {
+            const idx = allUsers.findIndex(u => u.id === userId);
+            if (idx === -1) throw new Error('用户不存在');
+            allUsers[idx] = ensureUserFields({ ...allUsers[idx], ...updates });
+            await saveUsersToRemote();
+            return allUsers[idx];
+        }
+
+        async function deleteUser(userId) {
+            allUsers = allUsers.filter(u => u.id !== userId);
+            await saveUsersToRemote();
+        }
+
+        // ================================================================
+        //  好友系统
+        // ================================================================
+        async function sendFriendRequest(userId, targetUsername) {
+            const target = findUserByUsername(targetUsername);
+            if (!target) throw new Error('用户不存在');
+            if (target.id === userId) throw new Error('不能添加自己为好友');
+            const user = findUserById(userId);
+            if (!user) throw new Error('当前用户不存在');
+            if (user.friends.includes(target.id)) throw new Error('你们已经是好友了');
+            if (target.friendRequests && target.friendRequests.includes(userId)) throw new Error('已发送过申请，等待对方处理');
+            if (user.friendRequests && user.friendRequests.includes(target.id)) {
+                await acceptFriendRequest(userId, target.id);
+                toast('对方也向你发过申请，已自动成为好友！', 'success');
+                return;
+            }
+            if (!target.friendRequests) target.friendRequests = [];
+            target.friendRequests.push(userId);
+            await saveUsersToRemote();
+            return target;
+        }
+
+        async function acceptFriendRequest(userId, requesterId) {
+            const user = findUserById(userId);
+            const requester = findUserById(requesterId);
+            if (!user || !requester) throw new Error('用户不存在');
+            user.friendRequests = (user.friendRequests || []).filter(id => id !== requesterId);
+            if (!user.friends) user.friends = [];
+            if (!requester.friends) requester.friends = [];
+            if (!user.friends.includes(requesterId)) user.friends.push(requesterId);
+            if (!requester.friends.includes(userId)) requester.friends.push(userId);
+            requester.friendRequests = (requester.friendRequests || []).filter(id => id !== userId);
+            await saveUsersToRemote();
+            return { user, requester };
+        }
+
+        async function rejectFriendRequest(userId, requesterId) {
+            const user = findUserById(userId);
+            if (!user) throw new Error('用户不存在');
+            user.friendRequests = (user.friendRequests || []).filter(id => id !== requesterId);
+            await saveUsersToRemote();
+            return user;
+        }
+
+        async function removeFriend(userId, friendId) {
+            const user = findUserById(userId);
+            const friend = findUserById(friendId);
+            if (!user || !friend) throw new Error('用户不存在');
+            user.friends = (user.friends || []).filter(id => id !== friendId);
+            friend.friends = (friend.friends || []).filter(id => id !== userId);
+            await saveUsersToRemote();
+            return user;
+        }
+
+        function getFriendList(user) {
+            if (!user) return [];
+            return (user.friends || []).map(id => findUserById(id)).filter(Boolean);
+        }
+
+        function getIncomingRequests(user) {
+            if (!user) return [];
+            return (user.friendRequests || []).map(id => findUserById(id)).filter(Boolean);
+        }
+
+        // ================================================================
+        //  在线状态管理
+        // ================================================================
+        async function setUserOnline(userId, online) {
+            const user = findUserById(userId);
+            if (!user) return;
+            user.online = online;
+            user.lastActive = online ? new Date().toISOString() : null;
+            await saveUsersToRemote();
+            return user;
+        }
+
+        function startHeartbeat(userId) {
+            if (heartbeatInterval) clearInterval(heartbeatInterval);
+            heartbeatInterval = setInterval(async () => {
+                if (currentUser && currentUser.id === userId) {
+                    try { await setUserOnline(userId, true); } catch (e) {}
+                } else {
+                    clearInterval(heartbeatInterval);
+                }
+            }, 30000);
+        }
+
+        // ================================================================
+        //  主题切换
+        // ================================================================
+        function setTheme(theme) {
+            currentTheme = theme;
+            document.documentElement.setAttribute('data-theme', theme);
+            const icon = themeToggle.querySelector('i');
+            icon.className = theme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+            localStorage.setItem('snw_theme', theme);
+        }
+
+        function toggleTheme() { setTheme(currentTheme === 'dark' ? 'light' : 'dark'); }
+
+        // ================================================================
+        //  导航 & UI
+        // ================================================================
+        function updateNav() {
+            if (currentUser) {
+                loginBtn.style.display = 'none';
+                registerBtn.style.display = 'none';
+                userWidget.style.display = 'flex';
+                navUserAvatar.src = currentUser.avatar || getDefaultAvatar();
+                navUserName.textContent = currentUser.username;
+            } else {
+                loginBtn.style.display = 'inline-flex';
+                registerBtn.style.display = 'inline-flex';
+                userWidget.style.display = 'none';
+            }
+        }
+
+        // ================================================================
+        //  模态框管理
+        // ================================================================
+        function openModal(modal) { modal.classList.add('active');
+            document.body.style.overflow = 'hidden'; }
+
+        function closeModal(modal) { modal.classList.remove('active');
+            document.body.style.overflow = ''; }
+
+        function openLogin() { openModal(loginModal); }
+
+        function openRegister() { openModal(registerModal); }
+
+        function openBind() { openModal(bindModal); }
+
+        function openReset() { generateCaptchaReset();
+            openModal(resetModal); }
+
+        function openForgotUser() { generateCaptchaForgot();
+            forgotUserResult.style.display = 'none';
+            forgotUserForm.reset();
+            openModal(forgotUserModal); }
+
+        function openProfile() {
+            if (!currentUser) { toast('请先登录', 'error'); return; }
+            profileAvatarImg.src = currentUser.avatar || getDefaultAvatar();
+            profileDisplayName.textContent = currentUser.username;
+            profileRealNameDisplay.textContent = currentUser.realName || '未设置';
+            profileUsername.textContent = currentUser.username;
+            profileRealName.textContent = currentUser.realName || '未设置';
+            if (currentUser.microsoft) {
+                profileMicrosoft.textContent = currentUser.microsoft;
+                profileMicrosoft.style.color = 'var(--text-primary)';
+                profileBindBtn.style.display = 'none';
+            } else {
+                profileMicrosoft.textContent = '未绑定';
+                profileMicrosoft.style.color = 'var(--accent)';
+                profileBindBtn.style.display = 'flex';
+            }
+            profileJoined.textContent = currentUser.createdAt ? new Date(currentUser.createdAt).toLocaleDateString() :
+                '未知';
+            openModal(profileModal);
+        }
+
+        function openFriendModal() {
+            if (!currentUser) { toast('请先登录', 'error'); return; }
+            renderFriendUI();
+            openModal(friendModal);
+        }
+
+        // ================================================================
+        //  渲染好友UI
+        // ================================================================
+        function renderFriendUI() {
+            if (!currentUser) return;
+            const requests = getIncomingRequests(currentUser);
+            requestBadge.textContent = requests.length;
+            if (requests.length === 0) {
+                incomingRequestsList.innerHTML =
+                    `<p style="color:var(--text-muted); font-size:0.9rem; padding:6px 0;">✅ 暂无申请</p>`;
+            } else {
+                let html = '';
+                requests.forEach(r => {
+                    html += `
+                            <div class="friend-item" style="border-left: 3px solid var(--accent);">
+                                <div class="info">
+                                    <img src="${r.avatar || getDefaultAvatar()}" alt="${r.username}" />
+                                    <span class="name">${r.username}</span>
+                                    <span style="font-size:0.75rem; color:var(--text-muted); margin-left:4px;">请求添加好友</span>
+                                </div>
+                                <div style="display:flex; gap:6px;">
+                                    <button class="btn btn-success btn-sm accept-request-btn" data-requesterid="${r.id}"><i class="fas fa-check"></i> 接受</button>
+                                    <button class="btn btn-danger btn-sm reject-request-btn" data-requesterid="${r.id}"><i class="fas fa-times"></i></button>
+                                </div>
+                            </div>
+                        `;
+                });
+                incomingRequestsList.innerHTML = html;
+                incomingRequestsList.querySelectorAll('.accept-request-btn').forEach(btn => {
+                    btn.addEventListener('click', async () => {
+                        const rid = btn.dataset.requesterid;
+                        try {
+                            await acceptFriendRequest(currentUser.id, rid);
+                            const updated = findUserById(currentUser.id);
+                            if (updated) currentUser = updated;
+                            localStorage.setItem('snw_session', JSON.stringify({ userId: currentUser.id }));
+                            renderFriendUI();
+                            toast('已接受好友申请', 'success');
+                        } catch (err) { toast('操作失败: ' + err.message, 'error'); }
+                    });
+                });
+                incomingRequestsList.querySelectorAll('.reject-request-btn').forEach(btn => {
+                    btn.addEventListener('click', async () => {
+                        const rid = btn.dataset.requesterid;
+                        if (!confirm('拒绝该申请吗？')) return;
+                        try {
+                            await rejectFriendRequest(currentUser.id, rid);
+                            const updated = findUserById(currentUser.id);
+                            if (updated) currentUser = updated;
+                            localStorage.setItem('snw_session', JSON.stringify({ userId: currentUser.id }));
+                            renderFriendUI();
+                            toast('已拒绝申请', 'info');
+                        } catch (err) { toast('操作失败: ' + err.message, 'error'); }
+                    });
+                });
+            }
+
+            const friends = getFriendList(currentUser);
+            if (friends.length === 0) {
+                friendList.innerHTML =
+                    `<p style="color:var(--text-muted); text-align:center; padding:10px 0;">暂无好友，去添加吧！</p>`;
+            } else {
+                let html = '';
+                friends.forEach(f => {
+                    const online = f.online || false;
+                    const dotClass = online ? 'online' : 'offline';
+                    const realNameDisplay = f.realName ? ` (${f.realName})` : '';
+                    html += `
+                            <div class="friend-item">
+                                <div class="info">
+                                    <img src="${f.avatar || getDefaultAvatar()}" alt="${f.username}" />
+                                    <span class="name">${f.username}</span>
+                                    <span style="font-size:0.8rem; color:var(--text-muted); margin-left:4px;">${realNameDisplay}</span>
+                                </div>
+                                <div class="status">
+                                    <span class="status-dot ${dotClass}"></span>
+                                    <span style="margin-right:10px;">${online ? '在线' : '离线'}</span>
+                                    <button class="btn btn-danger btn-sm remove-friend-btn" data-friendid="${f.id}"><i class="fas fa-user-minus"></i></button>
+                                </div>
+                            </div>
+                        `;
+                });
+                friendList.innerHTML = html;
+                friendList.querySelectorAll('.remove-friend-btn').forEach(btn => {
+                    btn.addEventListener('click', async () => {
+                        const fid = btn.dataset.friendid;
+                        const fName = findUserById(fid)?.username || '好友';
+                        if (!confirm(`确定要移除好友 "${fName}" 吗？`)) return;
+                        try {
+                            await removeFriend(currentUser.id, fid);
+                            const updated = findUserById(currentUser.id);
+                            if (updated) currentUser = updated;
+                            localStorage.setItem('snw_session', JSON.stringify({ userId: currentUser.id }));
+                            renderFriendUI();
+                            toast('已移除好友', 'info');
+                        } catch (err) { toast('操作失败: ' + err.message, 'error'); }
+                    });
+                });
+            }
+            updateSearchStatus('');
+        }
+
+        function updateSearchStatus(msg, type = '') {
+            friendSearchStatus.textContent = msg;
+            friendSearchStatus.className = 'friend-search-status ' + type;
+        }
+
+        async function handleSearchAndSend() {
+            const username = friendSearchInput.value.trim();
+            if (!username) { updateSearchStatus('请输入用户名', ''); return; }
+            if (!currentUser) { toast('请先登录', 'error'); return; }
+            await loadUsers();
+            const freshUser = findUserById(currentUser.id);
+            if (freshUser) currentUser = freshUser;
+            const target = findUserByUsername(username);
+            if (!target) { updateSearchStatus('❌ 用户不存在', 'err'); return; }
+            if (target.id === currentUser.id) { updateSearchStatus('⚠️ 不能添加自己', 'err'); return; }
+            if (currentUser.friends.includes(target.id)) { updateSearchStatus('✅ 你们已经是好友了', 'ok'); return; }
+            if ((currentUser.friendRequests || []).includes(target.id)) { updateSearchStatus('⏳ 对方已向你发送申请，请去上方处理',
+                    'pending'); return; }
+            if ((target.friendRequests || []).includes(currentUser.id)) { updateSearchStatus('⏳ 已发送申请，等待对方处理',
+                    'pending'); return; }
+            updateSearchStatus(`✅ 可发送申请给 ${target.username}`, 'ok');
+        }
+
+        async function handleSendRequest() {
+            const username = friendSearchInput.value.trim();
+            if (!username) { toast('请输入用户名', 'error'); return; }
+            if (!currentUser) { toast('请先登录', 'error'); return; }
+            try {
+                await loadUsers();
+                const freshUser = findUserById(currentUser.id);
+                if (freshUser) currentUser = freshUser;
+                await sendFriendRequest(currentUser.id, username);
+                const updated = findUserById(currentUser.id);
+                if (updated) currentUser = updated;
+                localStorage.setItem('snw_session', JSON.stringify({ userId: currentUser.id }));
+                renderFriendUI();
+                toast(`已向 ${username} 发送好友申请`, 'success');
+                friendSearchInput.value = '';
+                updateSearchStatus('', '');
+            } catch (err) {
+                toast('申请失败: ' + err.message, 'error');
+                await handleSearchAndSend();
+            }
+        }
+
+        // ================================================================
+        //  找回密码逻辑
+        // ================================================================
+        async function handleResetPassword(e) {
+            e.preventDefault();
+            const realName = resetRealName.value.trim();
+            const username = resetUsername.value.trim();
+            const microsoft = resetMicrosoft.value.trim();
+            const newPass = resetNewPassword.value;
+            const confirmPass = resetConfirmPassword.value;
+            const captchaVal = captchaInputReset.value.trim();
+
+            if (!realName || !username || !microsoft || !newPass || !confirmPass || !captchaVal) {
+                toast('请填写所有字段', 'error');
+                return;
+            }
+            if (newPass.length < 6) {
+                toast('新密码至少 6 位', 'error');
+                return;
+            }
+            if (newPass !== confirmPass) {
+                toast('两次输入的密码不一致', 'error');
+                return;
+            }
+            if (parseInt(captchaVal) !== captchaAnswerReset) {
+                toast('人机验证答案错误，请重试', 'error');
+                generateCaptchaReset();
+                return;
+            }
+
+            try {
+                await loadUsers();
+                const user = findUserByUsername(username);
+                if (!user) { toast('用户名不存在', 'error'); return; }
+                if (user.realName.toLowerCase() !== realName.toLowerCase()) {
+                    toast('真实姓名不匹配，请检查后重试', 'error');
+                    return;
+                }
+                if (user.microsoft.toLowerCase() !== microsoft.toLowerCase()) {
+                    toast('Microsoft 账号不匹配', 'error');
+                    return;
+                }
+                const hashedNew = await hashPassword(newPass);
+                await updateUser(user.id, { password: hashedNew });
+                if (currentUser && currentUser.id === user.id) {
+                    try { await setUserOnline(currentUser.id, false); } catch (_) {}
+                    if (heartbeatInterval) clearInterval(heartbeatInterval);
+                    currentUser = null;
+                    localStorage.removeItem('snw_session');
+                    updateNav();
+                }
+                toast('✅ 密码重置成功，请使用新密码登录', 'success');
+                closeModal(resetModal);
+                resetForm.reset();
+                generateCaptchaReset();
+                if (!currentUser) { setTimeout(openLogin, 500); }
+            } catch (err) {
+                toast('重置失败: ' + err.message, 'error');
+            }
+        }
+
+        // ================================================================
+        //  找回用户名逻辑
+        // ================================================================
+        async function handleForgotUsername(e) {
+            e.preventDefault();
+            const realName = forgotUserRealName.value.trim();
+            const email = forgotUserEmail.value.trim();
+            const captchaVal = captchaInputForgot.value.trim();
+
+            if (!realName || !email || !captchaVal) {
+                toast('请填写所有字段', 'error');
+                return;
+            }
+            if (!email.includes('@')) {
+                toast('请输入有效的邮箱地址', 'error');
+                return;
+            }
+            if (parseInt(captchaVal) !== captchaAnswerForgot) {
+                toast('人机验证答案错误，请重试', 'error');
+                generateCaptchaForgot();
+                return;
+            }
+
+            try {
+                await loadUsers();
+                const matchedUsers = allUsers.filter(u =>
+                    u.microsoft && u.microsoft.toLowerCase() === email.toLowerCase() &&
+                    u.realName && u.realName.toLowerCase() === realName.toLowerCase()
+                );
+                if (matchedUsers.length === 0) {
+                    toast('未找到与该邮箱和真实姓名匹配的用户', 'info');
+                    forgotUserResult.style.display = 'none';
+                    return;
+                }
+                forgotUserResult.style.display = 'block';
+                let html = '';
+                matchedUsers.forEach(u => {
+                    html +=
+                        `<div style="padding:4px 0; border-bottom:1px solid var(--border-color);">${u.username} ${u.realName ? '（' + u.realName + '）' : ''}</div>`;
+                });
+                forgotUserList.innerHTML = html;
+                toast(`找到 ${matchedUsers.length} 个关联账号`, 'success');
+            } catch (err) {
+                toast('查找失败: ' + err.message, 'error');
+            }
+        }
+
+        // ================================================================
+        //  绑定 Microsoft
+        // ================================================================
+        async function handleBindSubmit(e) {
+            e.preventDefault();
+            const microsoft = bindMicrosoft.value.trim();
+            if (!microsoft || !microsoft.includes('@')) { toast('请输入有效的 Microsoft 邮箱', 'error'); return; }
+            try {
+                const updated = await updateUser(currentUser.id, { microsoft: microsoft });
+                currentUser = updated;
+                localStorage.setItem('snw_session', JSON.stringify({ userId: currentUser.id }));
+                updateNav();
+                closeModal(bindModal);
+                bindForm.reset();
+                toast('Microsoft 账号绑定成功！', 'success');
+                if (profileModal.classList.contains('active')) openProfile();
+            } catch (err) { toast('绑定失败: ' + err.message, 'error'); }
+        }
+
+        function checkAndBindPrompt(user) {
+            if (!user || user.microsoft) return;
+            toast('你的账号尚未绑定 Microsoft 账号，请绑定', 'info');
+            setTimeout(() => { openBind(); }, 600);
+        }
+
+        // ================================================================
+        //  登录 / 注册
+        // ================================================================
+        async function handleLogin(e) {
+            e.preventDefault();
+            const username = loginUsername.value.trim();
+            const password = loginPassword.value.trim();
+            if (!username || !password) { toast('请填写完整信息', 'error'); return; }
+            try {
+                await loadUsers();
+                const user = await loginUser(username, password);
+                currentUser = user;
+                await setUserOnline(currentUser.id, true);
+                startHeartbeat(currentUser.id);
+                localStorage.setItem('snw_session', JSON.stringify({ userId: user.id }));
+                updateNav();
+                closeModal(loginModal);
+                loginForm.reset();
+                toast(`欢迎回来，${user.username}！`, 'success');
+                checkAndBindPrompt(currentUser);
+            } catch (err) { toast(err.message, 'error'); }
+        }
+
+        async function handleRegister(e) {
+            e.preventDefault();
+            const realName = regRealName.value.trim();
+            const microsoft = regMicrosoft.value.trim();
+            const username = regUsername.value.trim();
+            const password = regPassword.value.trim();
+            if (!realName || !microsoft || !username || !password) { toast('请填写所有必填字段', 'error'); return; }
+            if (username.length < 4 || username.length > 16 || !/^[A-Za-z0-9]+$/.test(username)) { toast('用户名需为 4-16 位字母或数字',
+                    'error'); return; }
+            if (password.length < 6) { toast('密码至少 6 位', 'error'); return; }
+            if (!microsoft.includes('@')) { toast('请输入有效的 Microsoft 邮箱', 'error'); return; }
+            try {
+                await loadUsers();
+                const user = await registerUser(realName, microsoft, username, password);
+                currentUser = user;
+                await setUserOnline(currentUser.id, true);
+                startHeartbeat(currentUser.id);
+                localStorage.setItem('snw_session', JSON.stringify({ userId: user.id }));
+                updateNav();
+                closeModal(registerModal);
+                registerForm.reset();
+                toast(`🎉 注册成功！欢迎 ${user.username}！`, 'success');
+            } catch (err) { toast(err.message, 'error'); }
+        }
+
+        // ================================================================
+        //  个人中心操作
+        // ================================================================
+        async function handleLogout() {
+            if (!confirm('确定要退出登录吗？')) return;
+            if (currentUser) {
+                try { await setUserOnline(currentUser.id, false); } catch (_) {}
+                if (heartbeatInterval) clearInterval(heartbeatInterval);
+            }
+            currentUser = null;
+            localStorage.removeItem('snw_session');
+            updateNav();
+            closeModal(profileModal);
+            toast('已退出登录', 'info');
+        }
+
+        async function handleDeleteAccount() {
+            if (!currentUser) return;
+            if (!confirm(`⚠️ 确定要永久注销账号 "${currentUser.username}" 吗？此操作不可恢复！`)) return;
+            if (!confirm('再次确认：你将失去所有数据，包括绑定信息。')) return;
+            try {
+                await loadUsers();
+                await deleteUser(currentUser.id);
+                if (heartbeatInterval) clearInterval(heartbeatInterval);
+                currentUser = null;
+                localStorage.removeItem('snw_session');
+                updateNav();
+                closeModal(profileModal);
+                toast('账号已注销', 'info');
+            } catch (err) { toast('注销失败: ' + err.message, 'error'); }
+        }
+
+        async function handleEditName() {
+            if (!currentUser) return;
+            const newName = prompt('请输入新的用户名 (4-16位字母或数字):', currentUser.username);
+            if (newName === null) return;
+            const trimmed = newName.trim();
+            if (!trimmed || trimmed.length < 4 || trimmed.length > 16 || !/^[A-Za-z0-9]+$/.test(trimmed)) { toast(
+                    '用户名需为 4-16 位字母或数字', 'error'); return; }
+            if (trimmed.toLowerCase() === currentUser.username.toLowerCase()) { toast('新用户名与当前相同', 'info'); return; }
+            await loadUsers();
+            if (findUserByUsername(trimmed)) { toast('用户名已被使用', 'error'); return; }
+            try {
+                const updated = await updateUser(currentUser.id, { username: trimmed.toLowerCase() });
+                currentUser = updated;
+                localStorage.setItem('snw_session', JSON.stringify({ userId: currentUser.id }));
+                updateNav();
+                openProfile();
+                toast('用户名已更新', 'success');
+            } catch (err) { toast('更新失败: ' + err.message, 'error'); }
+        }
+
+        async function handleEditAvatar() {
+            if (!currentUser) return;
+            const avatarOptions = CONFIG.DEFAULT_AVATARS.map((url, i) => `${i+1}. ${url.split('/').slice(-2).join('/')}`)
+                .join('\n');
+            const choice = prompt(
+                `选择头像 (输入编号 1-${CONFIG.DEFAULT_AVATARS.length}) 或输入图片URL:\n${avatarOptions}\n\n输入 "random" 随机选择`,
+                'random'
+            );
+            if (choice === null) return;
+            let newAvatar = null;
+            const num = parseInt(choice);
+            if (!isNaN(num) && num >= 1 && num <= CONFIG.DEFAULT_AVATARS.length) {
+                newAvatar = CONFIG.DEFAULT_AVATARS[num - 1];
+            } else if (choice.toLowerCase() === 'random') {
+                newAvatar = getDefaultAvatar();
+            } else if (choice.startsWith('http')) {
+                newAvatar = choice.trim();
+            } else { toast('无效选择', 'error'); return; }
+            try {
+                const updated = await updateUser(currentUser.id, { avatar: newAvatar });
+                currentUser = updated;
+                localStorage.setItem('snw_session', JSON.stringify({ userId: currentUser.id }));
+                updateNav();
+                openProfile();
+                toast('头像已更新', 'success');
+            } catch (err) { toast('更新失败: ' + err.message, 'error'); }
+        }
+
+        // ================================================================
+        //  Session 初始化
+        // ================================================================
+        async function initSession() {
+            const session = localStorage.getItem('snw_session');
+            if (session) {
+                try {
+                    const { userId } = JSON.parse(session);
+                    await loadUsers();
+                    const user = findUserById(userId);
+                    if (user) {
+                        currentUser = ensureUserFields(user);
+                        await setUserOnline(currentUser.id, true);
+                        startHeartbeat(currentUser.id);
+                        updateNav();
+                        setTimeout(() => checkAndBindPrompt(currentUser), 1000);
+                    } else {
+                        localStorage.removeItem('snw_session');
+                    }
+                } catch (_) { localStorage.removeItem('snw_session'); }
+            }
+            const savedTheme = localStorage.getItem('snw_theme') || 'dark';
+            setTheme(savedTheme);
+            renderChangelog();
+            generateCaptchaReset();
+            generateCaptchaForgot();
+        }
+
+        // ================================================================
+        //  事件绑定
+        // ================================================================
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navLinks.classList.toggle('open');
+        });
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('open');
+                document.querySelectorAll('.nav-links a').forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+            });
+        });
+
+        themeToggle.addEventListener('click', toggleTheme);
+        loginBtn.addEventListener('click', openLogin);
+        registerBtn.addEventListener('click', openRegister);
+        joinNowBtn.addEventListener('click', openRegister);
+
+        friendNavLink.addEventListener('click', (e) => { e.preventDefault();
+            openFriendModal(); });
+
+        // 模态框关闭
+        loginModalClose.addEventListener('click', () => closeModal(loginModal));
+        registerModalClose.addEventListener('click', () => closeModal(registerModal));
+        bindModalClose.addEventListener('click', () => closeModal(bindModal));
+        profileModalClose.addEventListener('click', () => closeModal(profileModal));
+        friendModalClose.addEventListener('click', () => closeModal(friendModal));
+        resetModalClose.addEventListener('click', () => closeModal(resetModal));
+        forgotUserModalClose.addEventListener('click', () => closeModal(forgotUserModal));
+        loginModal.addEventListener('click', (e) => { if (e.target === loginModal) closeModal(loginModal); });
+        registerModal.addEventListener('click', (e) => { if (e.target === registerModal) closeModal(registerModal); });
+        bindModal.addEventListener('click', (e) => { if (e.target === bindModal) closeModal(bindModal); });
+        profileModal.addEventListener('click', (e) => { if (e.target === profileModal) closeModal(profileModal); });
+        friendModal.addEventListener('click', (e) => { if (e.target === friendModal) closeModal(friendModal); });
+        resetModal.addEventListener('click', (e) => { if (e.target === resetModal) closeModal(resetModal); });
+        forgotUserModal.addEventListener('click', (e) => { if (e.target === forgotUserModal) closeModal(forgotUserModal); });
+
+        // 切换表单
+        switchToRegister.addEventListener('click', () => { closeModal(loginModal);
+            openRegister(); });
+        switchToLogin.addEventListener('click', () => { closeModal(registerModal);
+            openLogin(); });
+        switchToReset.addEventListener('click', () => { closeModal(loginModal);
+            openReset(); });
+        switchToForgotUser.addEventListener('click', () => { closeModal(loginModal);
+            openForgotUser(); });
+        switchToLoginFromReset.addEventListener('click', () => { closeModal(resetModal);
+            openLogin(); });
+        switchToForgotFromReset.addEventListener('click', () => { closeModal(resetModal);
+            openForgotUser(); });
+        switchToLoginFromForgotUser.addEventListener('click', () => { closeModal(forgotUserModal);
+            openLogin(); });
+        switchToResetFromForgotUser.addEventListener('click', () => { closeModal(forgotUserModal);
+            openReset(); });
+
+        bindSkip.addEventListener('click', () => closeModal(bindModal));
+
+        // 表单提交
+        loginForm.addEventListener('submit', handleLogin);
+        registerForm.addEventListener('submit', handleRegister);
+        bindForm.addEventListener('submit', handleBindSubmit);
+        resetForm.addEventListener('submit', handleResetPassword);
+        forgotUserForm.addEventListener('submit', handleForgotUsername);
+
+        // 人机验证刷新
+        captchaRefreshReset.addEventListener('click', generateCaptchaReset);
+        captchaRefreshForgot.addEventListener('click', generateCaptchaForgot);
+
+        // 个人中心
+        profileLogoutBtn.addEventListener('click', handleLogout);
+        profileDeleteBtn.addEventListener('click', handleDeleteAccount);
+        profileEditNameBtn.addEventListener('click', handleEditName);
+        profileEditAvatarBtn.addEventListener('click', handleEditAvatar);
+        profileBindBtn.addEventListener('click', () => { closeModal(profileModal);
+            setTimeout(openBind, 300); });
+        document.getElementById('profileAvatarWrap')?.addEventListener('click', (e) => {
+            if (e.target.closest('.avatar-edit')) return;
+            handleEditAvatar();
+        });
+        userWidget.addEventListener('click', (e) => {
+            if (e.target.closest('.user-avatar-nav') || e.target.closest('#navUserName')) {
+                openProfile();
+            }
+        });
+
+        qqCopy?.addEventListener('click', () => {
+            const qq = '701127260';
+            navigator.clipboard.writeText(qq).then(() => {
+                toast('QQ群号已复制: ' + qq, 'success');
+            }).catch(() => {
+                const input = document.createElement('input');
+                input.value = qq;
+                document.body.appendChild(input);
+                input.select();
+                document.execCommand('copy');
+                input.remove();
+                toast('QQ群号已复制: ' + qq, 'success');
+            });
+        });
+
+        friendSearchInput.addEventListener('input', handleSearchAndSend);
+        friendSendRequestBtn.addEventListener('click', handleSendRequest);
+        friendSearchInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleSendRequest(); });
+
+        // ================================================================
+        //  粒子特效
+        // ================================================================
+        (function initParticles() {
+            const canvas = document.getElementById('particles-canvas');
+            const ctx = canvas.getContext('2d');
+            let width, height;
+            let particles = [];
+            const PARTICLE_COUNT = 80;
+            const MAX_SPEED = 0.8;
+            const CONNECT_DIST = 150;
+
+            function resize() { width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight; }
+            window.addEventListener('resize', resize);
+            resize();
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * width;
+                    this.y = Math.random() * height;
+                    this.vx = (Math.random() - 0.5) * MAX_SPEED * 2;
+                    this.vy = (Math.random() - 0.5) * MAX_SPEED * 2;
+                    this.radius = Math.random() * 2 + 1.5;
+                    this.color = `rgba(247, 147, 30, ${Math.random() * 0.5 + 0.2})`;
+                }
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    if (this.x < 0 || this.x > width) this.vx *= -1;
+                    if (this.y < 0 || this.y > height) this.vy *= -1;
+                }
+                draw() { ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = this.color;
+                    ctx.fill(); }
+            }
+
+            function initParticles() { particles = []; for (let i = 0; i < PARTICLE_COUNT; i++) particles.push(new Particle()); }
+            initParticles();
+
+            function drawLines() {
+                for (let i = 0; i < particles.length; i++) {
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const dx = particles[i].x - particles[j].x;
+                        const dy = particles[i].y - particles[j].y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < CONNECT_DIST) {
+                            const alpha = 1 - (dist / CONNECT_DIST);
+                            ctx.beginPath();
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.strokeStyle = `rgba(247, 147, 30, ${alpha * 0.3})`;
+                            ctx.lineWidth = 1;
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, width, height);
+                particles.forEach(p => { p.update();
+                    p.draw(); });
+                drawLines();
+                requestAnimationFrame(animate);
+            }
+            animate();
+
+            let mouse = { x: null, y: null };
+            document.addEventListener('mousemove', (e) => {
+                mouse.x = e.clientX;
+                mouse.y = e.clientY;
+                particles.forEach(p => {
+                    const dx = p.x - mouse.x;
+                    const dy = p.y - mouse.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 120) {
+                        const force = (120 - dist) / 120;
+                        p.vx += (dx / dist) * force * 0.02;
+                        p.vy += (dy / dist) * force * 0.02;
+                    }
+                });
+            });
+        })();
+
+        // ================================================================
+        //  鼠标光效
+        // ================================================================
+        (function initCursorGlow() {
+            const glow = document.getElementById('cursor-glow');
+            document.addEventListener('mousemove', (e) => {
+                glow.style.left = e.clientX + 'px';
+                glow.style.top = e.clientY + 'px';
+            });
+        })();
+
+        // ================================================================
+        //  滚动动画
+        // ================================================================
+        (function initReveal() {
+            const reveals = document.querySelectorAll('.reveal');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+            }, { threshold: 0.15 });
+            reveals.forEach(el => observer.observe(el));
+        })();
+
+        // ================================================================
+        //  页面关闭前离线
+        // ================================================================
+        window.addEventListener('beforeunload', async () => {
+            if (currentUser) { try { await setUserOnline(currentUser.id, false); } catch (_) {} }
+        });
+
+        // ================================================================
+        //  启动
+        // ================================================================
+        initSession().then(() => {
+            console.log('🍞 面包工作室丨少年沃科技 v2.7 Based on shenlinOS');
+            console.log('👤 当前用户:', currentUser?.username || '未登录');
+        }).catch(console.warn);
+
+        window.__snw = { currentUser, allUsers, loadUsers, updateUser, deleteUser, toast, sendFriendRequest,
+            acceptFriendRequest, rejectFriendRequest, removeFriend, getFriendList, getIncomingRequests };
+    </script>
+</body>
+</html>
